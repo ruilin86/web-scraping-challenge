@@ -22,14 +22,17 @@ def MarsNews():
     browser = init_browser()
     url = 'https://mars.nasa.gov/news/'
     browser.visit(url)
+    # time.sleep(1)
     html = browser.html
     soup = bs(html, "html.parser")
 
     article = soup.find('div', class_='list_text')
     mars_title = article.find('div', class_= 'content_title').text
-    mars_p = article.find('div', class_ ='article_teaser_body').text
+    mars_p = article.find('div', class_ = 'article_teaser_body').text
     mars_news = [mars_title, mars_p]
+    browser.quit()
     return mars_news
+    
 
 def MarsImage():
     browser = init_browser()
@@ -39,7 +42,9 @@ def MarsImage():
     soup = bs(html, "html.parser")
     relative_image_path = soup.find('img', class_='thumb')["src"]
     mars_image = "https://www.jpl.nasa.gov" + relative_image_path
+    browser.quit()
     return mars_image
+    
 
 def MarsFact():
     browser = init_browser()
@@ -49,9 +54,10 @@ def MarsFact():
     fact_data = pd.DataFrame(fact_data[0])
     fact_data.columns=["Description","Mars"]
     fact_data.set_index("Description", inplace=True)
+    # fact_data.find("tbody")
     mars_fact = fact_data.to_html(header = True, index = True)
+    browser.quit()
     return mars_fact
-
 
 def MarsHem():
     browser = init_browser()
@@ -75,5 +81,6 @@ def MarsHem():
         downloads = soup.find("div", class_="downloads")
         img_url = downloads.find("a")["href"]
         mars_hemisphere.append({"img_title": img_title, "img_url": img_url})
-        return mars_hemisphere
+        
     browser.quit()
+    return mars_hemisphere
